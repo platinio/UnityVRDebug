@@ -1,0 +1,48 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+
+# == vim swap files == #
+*.sw*
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# == project == #
+Assets/scenes/sandboxes/*.unity*
+.vs/enfermeria-vr/v15/Server/sqlite3/storage.ide
+.vs/enfermeria-vr/v15/Server/sqlite3/storage.ide-wal
+.vs/enfermeria-vr/v15/Server/sqlite3/storage.ide-shm
+.vs/enfermeria-vr/v15/Server/sqlite3/db.lock
+.vs/vr-lab/v15/Server/sqlite3/storage.ide-wal
+.vs/vr-lab/v15/Server/sqlite3/storage.ide-shm
+.vs/vr-lab/v15/Server/sqlite3/storage.ide
+.vs/vr-lab/v15/Server/sqlite3/db.lock
+.vs/
+Assets/SteamVR/
+Assets/SteamVR_Input/
