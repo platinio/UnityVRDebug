@@ -1,18 +1,28 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ConsoleCanvas : MonoBehaviour
+namespace VRDebug
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ConsoleCanvas : MonoBehaviour
     {
+        [SerializeField] private Transform logContainer = null;
+        [SerializeField] private LogCell logCellPrefab = null;
         
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Start()
+        {
+            Application.logMessageReceived += HandleLog;
+        }
+
+        private void OnDestroy()
+        {
+            Application.logMessageReceived -= HandleLog;
+        }
+
+        private void HandleLog(string log , string stackTrace , LogType logType)
+        {
+            LogCell cell = Instantiate(logCellPrefab);
+            cell.Construct(log);
+        }
     }
 }
+
