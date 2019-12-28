@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_destroyOnLoad: 0
+  consolePrefab: {fileID: 2240400099975302829, guid: c69b2b6de462e184eb7e76f215c7122b,
+    type: 3}
