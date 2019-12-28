@@ -11,7 +11,10 @@ namespace VRDebug
         [SerializeField] private Image backGround = null;
         [SerializeField] private TextMeshProUGUI logText = null;
         [SerializeField] private TextMeshProUGUI stackTraceText = null;
-        
+
+        private int collapseCounter = 0;
+
+        public int CollapseCounter { get { return collapseCounter; } set { } }
         
 
         public void Construct(string log , string stackTrace , LogViewMode viewMode)
