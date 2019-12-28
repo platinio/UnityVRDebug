@@ -518,6 +518,7 @@ GameObject:
   - component: {fileID: 8357378577133745229}
   - component: {fileID: 5653200276358125638}
   - component: {fileID: 2538022553159067674}
+  - component: {fileID: 6851979334057414827}
   m_Layer: 5
   m_Name: ConsoleCanvas
   m_TagString: Untagged
@@ -636,9 +637,19 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: cfcbb3df3aef19c47b8f82ef77a06000, type: 3}
     textColor: {r: 0, g: 0, b: 0, a: 1}
     bgColor: {r: 0.98039216, g: 0.9718709, b: 0.41960782, a: 1}
-  showErrors: 0
-  showDebugs: 0
-  showWarnings: 0
+  currentLogFilter: 0
+--- !u!114 &6851979334057414827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2436212733262405712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4960d7eafde354ab2b099b236e54e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4678998653712634678
 GameObject:
   m_ObjectHideFlags: 0

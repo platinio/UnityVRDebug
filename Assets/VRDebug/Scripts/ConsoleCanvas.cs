@@ -18,10 +18,8 @@ namespace VRDebug
     public class ConsoleCanvas : MonoBehaviour
     {
         [SerializeField] private Transform logContainer = null;
-        [SerializeField] private LogCell logCellPrefab = null;
-        [SerializeField] private ScrollRect scrollRect = null;
-        [SerializeField] private Scroller scroller = null;
-        [SerializeField] private float scrollSpeed = 200.0f;
+        [SerializeField] private LogCell logCellPrefab = null;       
+        [SerializeField] private Scroller scroller = null;        
         [SerializeField] private LogViewMode debugLogViewMode;
         [SerializeField] private LogViewMode errorLogViewMode;
         [SerializeField] private LogViewMode warningLogViewMode;
@@ -55,28 +53,6 @@ namespace VRDebug
                 }
 
             }
-        }
-
-        private void Update()
-        {
-            InputDevice rightHand = InputDevices.GetDeviceAtXRNode( XRNode.RightHand );
-
-            Vector2 value = Vector2.zero;
-            rightHand.TryGetFeatureValue( CommonUsages.primary2DAxis, out value );
-
-           
-            scrollRect.velocity = value * scrollSpeed * Time.deltaTime;
-
-            InputDevice leftHand = InputDevices.GetDeviceAtXRNode( XRNode.LeftHand );
-
-            value = Vector2.zero;
-            leftHand.TryGetFeatureValue( CommonUsages.primary2DAxis, out value );
-
-
-            if ( Mathf.Abs( value.x) > 0.5f)
-                MoveLogFilter( value.x > 0.0f ? 1 : -1 );
-
-            //Debug.Log(value);
         }
 
         public void MoveLogFilter(int dir)
