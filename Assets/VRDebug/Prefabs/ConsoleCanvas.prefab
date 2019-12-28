@@ -622,9 +622,7 @@ MonoBehaviour:
   logContainer: {fileID: 5360623503382567618}
   logCellPrefab: {fileID: 585772995571919705, guid: af75aecd66bcbf640ab967c50b1a04c7,
     type: 3}
-  scrollRect: {fileID: 1966903720012053105}
   scroller: {fileID: 1966903720012053104}
-  scrollSpeed: 30000
   debugLogViewMode:
     icon: {fileID: 21300000, guid: 4570de0f8195e65459c1837b4fbc0d3a, type: 3}
     textColor: {r: 0, g: 0, b: 0, a: 1}
@@ -650,6 +648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c4960d7eafde354ab2b099b236e54e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSpeed: 30000
+  scrollRect: {fileID: 1966903720012053105}
 --- !u!1 &4678998653712634678
 GameObject:
   m_ObjectHideFlags: 0

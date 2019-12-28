@@ -122,18 +122,18 @@ public class Scroller : MonoBehaviour , IPointerDownHandler , IPointerUpHandler 
     /// <summary>
     /// Resizes the content rect to fit new elements
     /// </summary>
-    protected void ResizeContentRect()
+    public void ResizeContentRect()
     {
-
+        int activeElements = ActiveElementsCount();
         float size = 0.0f;
 
         if (scrollMode == ScrollMode.Horizontal)
         {
-            size = ( gridLayout.cellSize.x + gridLayout.spacing.x ) * elements.Count;
+            size = ( gridLayout.cellSize.x + gridLayout.spacing.x ) * activeElements;
         }
         else if (scrollMode == ScrollMode.Vertical)
         {
-            size = ( gridLayout.cellSize.y + gridLayout.spacing.y ) * elements.Count;
+            size = ( gridLayout.cellSize.y + gridLayout.spacing.y ) * activeElements;
         }
 
         //resize contentRect to fit new element
@@ -164,6 +164,19 @@ public class Scroller : MonoBehaviour , IPointerDownHandler , IPointerUpHandler 
         }
 
 
+    }
+
+    private int ActiveElementsCount()
+    {
+        int counter = 0;
+
+        for (int n = 0; n < elements.Count; n++)
+        {
+            if (elements[n].gameObject.activeInHierarchy)
+                counter++;
+        }
+
+        return counter;
     }
 
     /// <summary>

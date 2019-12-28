@@ -18,7 +18,7 @@ namespace VRDebug
         public LogType LogType { get; private set; }
         
 
-        public void Construct(string log , string stackTrace , LogViewMode viewMode , LogType logType)
+        public void Construct(string log , string stackTrace , LogType logType, LogViewMode viewMode)
         {
             LogType = logType;
             logText.text = log;

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.XR;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,10 +22,11 @@ namespace VRDebug
         [SerializeField] private LogViewMode debugLogViewMode;
         [SerializeField] private LogViewMode errorLogViewMode;
         [SerializeField] private LogViewMode warningLogViewMode;
+        [SerializeField] private UnityEvent OnLogFilterChange = null;
 
-        private Dictionary<string, LogCell> logCellDictonary = new Dictionary<string, LogCell>();
-        
-        public LogFilter currentLogFilter = LogFilter.Log;
+        private Dictionary<string, LogCell> logCellDictonary = new Dictionary<string, LogCell>();        
+
+        public LogFilter CurrentLogFilter { get; private set; }
         
         private void Awake()
         {
@@ -57,16 +57,17 @@ namespace VRDebug
 
         public void MoveLogFilter(int dir)
         {
-            int enumValue = ( (int) currentLogFilter ) + dir;
+            int enumValue = ( (int) CurrentLogFilter ) + dir;
 
             if (enumValue < 0)
                 enumValue = 3;
             if (enumValue > 3)
                 enumValue = 0;
 
-            currentLogFilter = (LogFilter) enumValue;
+            CurrentLogFilter = (LogFilter) enumValue;
 
             OnUpdateLogFilter();
+            OnLogFilterChange.Invoke();
         }
 
         public void OnUpdateLogFilter()
@@ -97,7 +98,7 @@ namespace VRDebug
             else
             {
                 cell = CreateLogCell();
-                cell.Construct( log, stackTrace, GetLogViewMode( logType ) , logType );
+                cell.Construct( log, stackTrace, logType , GetLogViewMode( logType ) );
                 logCellDictonary[stackTrace + log] = cell;
                 scroller.AddElement( cell.gameObject );
 
@@ -113,15 +114,15 @@ namespace VRDebug
 
         private bool CanRenderLogType(LogType logType)
         {
-            if (currentLogFilter == LogFilter.All)
+            if (CurrentLogFilter == LogFilter.All)
                 return true;
 
             if (logType == LogType.Error || logType == LogType.Exception)
-                return currentLogFilter == LogFilter.Error;
+                return CurrentLogFilter == LogFilter.Error;
             if (logType == LogType.Warning)
-                return currentLogFilter == LogFilter.Warning;
+                return CurrentLogFilter == LogFilter.Warning;
             if (logType == LogType.Log)
-                return currentLogFilter == LogFilter.Log;
+                return CurrentLogFilter == LogFilter.Log;
             
             return false;
         }
