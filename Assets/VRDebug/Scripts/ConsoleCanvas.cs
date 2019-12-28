@@ -2,10 +2,19 @@
 using UnityEngine.UI;
 using UnityEngine.XR;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VRDebug
 {
-   
+
+    public enum LogFilter
+    {
+        Log = 0,
+        Warning = 1,
+        Error = 2,
+        All = 3
+    }
+
     public class ConsoleCanvas : MonoBehaviour
     {
         [SerializeField] private Transform logContainer = null;
@@ -18,17 +27,12 @@ namespace VRDebug
         [SerializeField] private LogViewMode warningLogViewMode;
 
         private Dictionary<string, LogCell> logCellDictonary = new Dictionary<string, LogCell>();
-
-        private bool showDebugs;
-        private bool showWarnings;
-        private bool showErrors;
-
-        public LogFilter LogFilter = new LogFilter();
+        
+        public LogFilter currentLogFilter = LogFilter.Log;
         
         private void Awake()
         {
-            Application.logMessageReceived += HandleLog;
-            LogFilter.showDebugs = true;
+            Application.logMessageReceived += HandleLog;           
         }
 
         private void Start()
@@ -39,15 +43,15 @@ namespace VRDebug
 
                 if (rand <= 0.33)
                 {
-                    Debug.Log( "Log test" );
+                    Debug.Log( "Log test" + n );
                 }
                 else if (rand <= 0.66)
                 {
-                    Debug.LogWarning( "Warning test" );
+                    Debug.LogWarning( "Warning test" + n );
                 }
                 else
                 {
-                    Debug.LogError("Error test");
+                    Debug.LogError("Error test" + n);
                 }
 
             }
@@ -69,10 +73,35 @@ namespace VRDebug
             leftHand.TryGetFeatureValue( CommonUsages.primary2DAxis, out value );
 
 
-            if (value.x > 0.5f)
-                LogFilter.Toggle();
+            if ( Mathf.Abs( value.x) > 0.5f)
+                MoveLogFilter( value.x > 0.0f ? 1 : -1 );
 
             //Debug.Log(value);
+        }
+
+        public void MoveLogFilter(int dir)
+        {
+            int enumValue = ( (int) currentLogFilter ) + dir;
+
+            if (enumValue < 0)
+                enumValue = 3;
+            if (enumValue > 3)
+                enumValue = 0;
+
+            currentLogFilter = (LogFilter) enumValue;
+
+            OnUpdateLogFilter();
+        }
+
+        public void OnUpdateLogFilter()
+        {
+            List<LogCell> cellList = logCellDictonary.Values.ToList();
+
+            for (int n = 0; n < cellList.Count; n++)
+            {
+                LogCell cell = cellList[n];
+                cellList[n].gameObject.SetActive( CanRenderLogType( cell.LogType ) );
+            }
         }
 
         private void OnDestroy()
@@ -85,15 +114,15 @@ namespace VRDebug
 
             LogCell cell = null;
 
-            if (logCellDictonary.TryGetValue( stackTrace, out cell ))
+            if (logCellDictonary.TryGetValue( stackTrace + log, out cell ))
             {
                 cell.CollapseCounter++;
             }
             else
             {
                 cell = CreateLogCell();
-                cell.Construct( log, stackTrace, GetLogViewMode( logType ) );
-                logCellDictonary[stackTrace] = cell;
+                cell.Construct( log, stackTrace, GetLogViewMode( logType ) , logType );
+                logCellDictonary[stackTrace + log] = cell;
                 scroller.AddElement( cell.gameObject );
 
                 if (!CanRenderLogType( logType ))
@@ -108,12 +137,17 @@ namespace VRDebug
 
         private bool CanRenderLogType(LogType logType)
         {
-            if (logType == LogType.Error || logType == LogType.Exception)
-                return LogFilter.showErrors;
-            if (logType == LogType.Warning)
-                return LogFilter.showWarnings;
+            if (currentLogFilter == LogFilter.All)
+                return true;
 
-            return LogFilter.showDebugs;
+            if (logType == LogType.Error || logType == LogType.Exception)
+                return currentLogFilter == LogFilter.Error;
+            if (logType == LogType.Warning)
+                return currentLogFilter == LogFilter.Warning;
+            if (logType == LogType.Log)
+                return currentLogFilter == LogFilter.Log;
+            
+            return false;
         }
 
         private LogCell CreateLogCell()
@@ -146,29 +180,7 @@ namespace VRDebug
         public Color bgColor;
     }
 
-    public class LogFilter
-    {
-            
-        
-
-        public void Toggle()
-        {
-            if (showDebugs)
-            {
-                showDebugs = false;
-                showWarnings = true;
-            }
-            else if (showWarnings)
-            {
-                showWarnings = false;
-                showErrors = true;
-            }
-            else
-            {
-                showDebugs = showWarnings = showErrors = true;
-            }
-        }
-    }
+    
 
 }
 

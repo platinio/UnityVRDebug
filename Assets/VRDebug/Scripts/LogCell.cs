@@ -15,10 +15,12 @@ namespace VRDebug
         private int collapseCounter = 0;
 
         public int CollapseCounter { get { return collapseCounter; } set { } }
+        public LogType LogType { get; private set; }
         
 
-        public void Construct(string log , string stackTrace , LogViewMode viewMode)
+        public void Construct(string log , string stackTrace , LogViewMode viewMode , LogType logType)
         {
+            LogType = logType;
             logText.text = log;
             stackTraceText.text = stackTrace;
 
