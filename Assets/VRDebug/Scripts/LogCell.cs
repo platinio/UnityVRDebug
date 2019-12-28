@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 namespace VRDebug
@@ -8,12 +7,32 @@ namespace VRDebug
 
     public class LogCell : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI text = null;
+        [SerializeField] private Image icon = null;
+        [SerializeField] private Image backGround = null;
+        [SerializeField] private TextMeshProUGUI logText = null;
+        [SerializeField] private TextMeshProUGUI stackTraceText = null;
+        
+        
 
-        public void Construct(string label)
+        public void Construct(string log , string stackTrace , LogViewMode viewMode)
         {
-            text.text = label;
+            logText.text = log;
+            stackTraceText.text = stackTrace;
+
+            ApplyLogViewMode(viewMode);
         }
+
+        private void ApplyLogViewMode(LogViewMode viewMode)
+        {
+            icon.sprite = viewMode.icon;
+            backGround.color = viewMode.bgColor;
+            logText.color = viewMode.textColor;
+            stackTraceText.color = viewMode.textColor;
+        }
+
+
+
+
     }
 
 }
