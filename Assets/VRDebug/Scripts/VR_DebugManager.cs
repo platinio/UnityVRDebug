@@ -11,6 +11,9 @@ namespace VRDebug
 
         private InputDevice rightHand;
         private List<InputDevice> inputDeviceList = new List<InputDevice>();
+        private bool waitButtonUp = false;
+        private float timer = 0.0f;
+        private const float buttonPressedTime = 3.0f;
 
         protected override void Awake()
         {
@@ -22,27 +25,25 @@ namespace VRDebug
 
         private void Update()
         {
-            if (ShouldCreateConsole() && !IsConsoleActive())
+            if (VR_Input.GetPrimaryButtonDown( XRNode.LeftHand ) && VR_Input.GetPrimaryButtonDown( XRNode.RightHand ))
             {
+                timer += Time.deltaTime;
+            }
+            else
+            {
+                timer = 0.0f;
+                waitButtonUp = false;
+            }
+
+            if ( timer > buttonPressedTime && !waitButtonUp)
+            {
+                DestroyAllConsoles();
                 CreateConsole();
+                waitButtonUp = true;
             }
 
         }
-
-        private bool IsConsoleActive()
-        {
-            return FindObjectOfType<ConsoleCanvas>() != null;
-        }
-
-        private bool ShouldCreateConsole()
-        {
-            rightHand = InputDevices.GetDeviceAtXRNode( XRNode.RightHand );
-            
-            bool value = false;
-            rightHand.TryGetFeatureValue( CommonUsages.triggerButton, out value );
-            return value;
-        }
-
+        
         private void CreateConsole()
         {
             Vector3 position = Vector3.zero;
@@ -56,6 +57,16 @@ namespace VRDebug
             }
 
             Instantiate(consolePrefab , position , rotation);
+        }
+
+        private void DestroyAllConsoles()
+        {
+            ConsoleCanvas[] consoleCanvasArray = FindObjectsOfType<ConsoleCanvas>();
+
+            for (int n = 0; n < consoleCanvasArray.Length; n++)
+            {
+                Destroy( consoleCanvasArray[n].gameObject );
+            }
         }
 
     }

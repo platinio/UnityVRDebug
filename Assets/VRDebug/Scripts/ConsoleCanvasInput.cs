@@ -10,9 +10,7 @@ namespace VRDebug
         [SerializeField] private ScrollRect scrollRect = null;
 
         private ConsoleCanvas consoleCanvas = null;
-        private InputDevice rightHand;
-        private InputDevice leftHand;
-
+      
         private bool waitJoystickZero = false;
 
         private void Awake()
@@ -28,7 +26,7 @@ namespace VRDebug
 
         private void UpdateLogFilterInput()
         {
-            Vector2 leftJoytstick = GetJoystickInput( XRNode.LeftHand );
+            Vector2 leftJoytstick = VR_Input.GetJoystickInput( XRNode.LeftHand );
 
             if (!waitJoystickZero && Mathf.Abs( leftJoytstick.x ) > 0.25f)
             {
@@ -44,34 +42,10 @@ namespace VRDebug
 
         private void UpdateScrollInput()
         {
-            Vector2 rightJoystick = GetJoystickInput( XRNode.RightHand );
+            Vector2 rightJoystick = VR_Input.GetJoystickInput( XRNode.RightHand );
             scrollRect.velocity = rightJoystick * Time.deltaTime * scrollSpeed;
         }
 
-        private Vector2 GetJoystickInput( XRNode node )
-        {
-            InputDevice hand = GetHand(node);
-
-            Vector2 input = Vector2.zero;
-            hand.TryGetFeatureValue( CommonUsages.primary2DAxis , out input );
-            return input;
-        }
-
-        private InputDevice GetHand(XRNode node)
-        {
-            if (node == XRNode.RightHand && !rightHand.isValid)
-            {
-                rightHand = InputDevices.GetDeviceAtXRNode(node);
-                return rightHand;
-            }
-            if (node  == XRNode.LeftHand)
-            {
-                leftHand = InputDevices.GetDeviceAtXRNode(node);
-                return leftHand;
-            }
-
-            return rightHand;
-        }
 
     }
 
