@@ -34,7 +34,7 @@ namespace VRDebug
         {
             Application.logMessageReceived += HandleLog;           
         }
-       
+               
         public void MoveLogFilter(int dir)
         {
             int enumValue = ( (int) CurrentLogFilter ) + dir;
@@ -122,7 +122,7 @@ namespace VRDebug
         private LogCell CreateLogCell()
         {
             LogCell cell = Instantiate( logCellPrefab );           
-            cell.transform.parent = logContainer;
+            cell.transform.SetParent( logContainer , false);
             cell.transform.localScale = Vector3.one;
 
             return cell;

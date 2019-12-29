@@ -52,8 +52,9 @@ namespace VRDebug
 
             if (camera != null)
             {
+                Debug.Log("log camera main no null");
                 position = camera.transform.position + camera.transform.forward * 8.0f;
-                rotation = Quaternion.LookRotation( camera.transform.forward * -1.0f );
+                rotation = Quaternion.LookRotation( camera.transform.forward  );
             }
 
             Instantiate(consolePrefab , position , rotation);
