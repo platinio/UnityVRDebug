@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 namespace VRDebug
 {
@@ -21,7 +23,7 @@ namespace VRDebug
         [SerializeField] private Scroller scroller = null;        
         [SerializeField] private LogViewMode debugLogViewMode;
         [SerializeField] private LogViewMode errorLogViewMode;
-        [SerializeField] private LogViewMode warningLogViewMode;
+        [SerializeField] private LogViewMode warningLogViewMode;       
         [SerializeField] private UnityEvent OnLogFilterChange = null;
 
         private Dictionary<string, LogCell> logCellDictonary = new Dictionary<string, LogCell>();        
@@ -32,29 +34,7 @@ namespace VRDebug
         {
             Application.logMessageReceived += HandleLog;           
         }
-
-        private void Start()
-        {
-            for (int n = 0; n < 100; n++)
-            {
-                float rand = Random.value;
-
-                if (rand <= 0.33)
-                {
-                    Debug.Log( "Log test" + n );
-                }
-                else if (rand <= 0.66)
-                {
-                    Debug.LogWarning( "Warning test" + n );
-                }
-                else
-                {
-                    Debug.LogError("Error test" + n);
-                }
-
-            }
-        }
-
+       
         public void MoveLogFilter(int dir)
         {
             int enumValue = ( (int) CurrentLogFilter ) + dir;
@@ -97,6 +77,7 @@ namespace VRDebug
             }
             else
             {
+                stackTrace = ProcessStackTrace(stackTrace);
                 cell = CreateLogCell();
                 cell.Construct( log, stackTrace, logType , GetLogViewMode( logType ) );
                 logCellDictonary[stackTrace + log] = cell;
@@ -110,7 +91,18 @@ namespace VRDebug
             }            
 
         }
-                
+
+        private string ProcessStackTrace(string stackTrace)
+        {
+            string[] stackTraceArray = stackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+            if (stackTraceArray.Length > 3)
+            {
+                return stackTraceArray[stackTraceArray.Length - 2] + stackTraceArray[stackTraceArray.Length - 1] + stackTraceArray[stackTraceArray.Length - 1];
+            }
+
+            return stackTrace;
+        }
 
         private bool CanRenderLogType(LogType logType)
         {
